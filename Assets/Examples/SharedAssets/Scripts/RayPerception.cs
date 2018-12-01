@@ -28,25 +28,31 @@ public class RayPerception : MonoBehaviour
         // along with object distance.
         foreach (float angle in rayAngles)
         {
-            endPosition = transform.TransformDirection(
-                PolarToCartesian(rayDistance, angle));
+            endPosition = transform.TransformDirection(PolarToCartesian(rayDistance, angle));
             endPosition.y = endOffset;
+            
             if (Application.isEditor)
             {
-                Debug.DrawRay(transform.position + new Vector3(0f, startOffset, 0f),
-              endPosition, Color.black, 0.01f, true);
+                Debug.DrawRay(transform.position + new Vector3(0f, startOffset, 0f), endPosition, Color.black, 0.01f, true);
+                /*
+                for (float my_angle = 0f; my_angle < 360f; my_angle += 360f / rayAngles.Length)
+                {
+                    Debug.DrawRay(transform.position + endPosition, transform.TransformDirection(PolarToCartesian(2.225f, my_angle)), Color.red, 0.01f, true);
+                }
+                */
             }
+            
             float[] subList = new float[detectableObjects.Length + 2];
-            if (Physics.SphereCast(transform.position +
-                                   new Vector3(0f, startOffset, 0f), 0.5f,
+            if (Physics.SphereCast(transform.position + new Vector3(0f, startOffset, 0f), 2f,
                                    endPosition, out hit, rayDistance))
             {
                 for (int i = 0; i < detectableObjects.Length; i++)
                 {
-                    if (hit.collider.gameObject.CompareTag(detectableObjects[i]))
+                    if (hit.collider.gameObject.CompareTag(detectableObjects[i]) && detectableObjects[i] == "Agent")
                     {
                         subList[i] = 1;
                         subList[detectableObjects.Length + 1] = hit.distance / rayDistance;
+                        Debug.DrawRay(transform.position + new Vector3(0f, startOffset, 0f), endPosition, Color.black, 0.01f, true);
                         break;
                     }
                 }

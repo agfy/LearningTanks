@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class TankArea : MonoBehaviour
 {
-	[SerializeField]
-	public List<Vector2> spawnPoints;
+	private void Awake()
+	{
+		
+	}
+
 	// Use this for initialization
 	void Start()
 	{
@@ -35,7 +38,11 @@ public class TankArea : MonoBehaviour
 		}
 	}
 
-	public void ResetArea()
+	public void ResetArea(GameObject[] agents)
 	{
+		foreach (GameObject agent in agents)
+		{
+			agent.GetComponent<Health>().SetTankActive(true);
+		}
 	}
 }

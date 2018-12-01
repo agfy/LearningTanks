@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Crate
   - Agent
+  - banana
+  - badBanana
+  - agent
+  - wall
+  - frozenAgent
   layers:
   - Default
   - TransparentFX

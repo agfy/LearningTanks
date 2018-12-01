@@ -13,7 +13,7 @@ public class Shooting : MonoBehaviour
 {
 	// Unique playerID used to identify this tank.
 	[SerializeField]
-	protected int m_PlayerNumber = 1;
+	public int m_PlayerNumber = 1;
 
 	// Prefab of the default shell.
 	[SerializeField]
@@ -67,6 +67,8 @@ public class Shooting : MonoBehaviour
 
 	[SerializeField]
 	protected AnimationCurve m_FireRecoilCurve;
+	public GameObject myAcademyObj;
+	TankAcademy myAcademy;
 
 	private Vector3 m_DefaultTurretPos;
 	private Vector2 m_RecoilDirection;
@@ -101,7 +103,7 @@ public class Shooting : MonoBehaviour
 
 	// The force that will be given to the shell when the fire button is released.
 	//private float m_CurrentLaunchAngle;
-	private float m_CurrentLaunchForce;
+	public float m_CurrentLaunchForce;
 
 	// How fast the launch force increases, based on the max charge time.
 	private float m_ChargeSpeed;
@@ -186,6 +188,7 @@ public class Shooting : MonoBehaviour
 	{
 		Init();
 		m_LastLookUpdate = Time.realtimeSinceStartup;
+		myAcademy = myAcademyObj.GetComponent<TankAcademy>();
 	}
 
 	private void Start()
@@ -359,6 +362,7 @@ public class Shooting : MonoBehaviour
 
 		// Immediately fire shell on client - this provides players with the necessary feedback they want
 		FireVisualClientShell(fireVector, m_FireTransform.position, randSeed);
+		myAcademy.AddRewardToPlayer(m_PlayerNumber, 1f);
 
 		// Reset the launch force.  This is a precaution in case of missing button events.
 		//m_CurrentLaunchAngle = m_MaxLaunchAngle;

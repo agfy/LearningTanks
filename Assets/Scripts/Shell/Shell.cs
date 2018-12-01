@@ -158,14 +158,14 @@ namespace Tanks.Shells
 			Vector3 explosionPosition = c.contacts.Length > 0 ? c.contacts[0].point : transform.position;
 			ExplosionSettings settings = m_Bounces > 0 ? m_BounceExplosionSettings : m_ExplosionSettings;
 
-			if (ExplosionManager.s_InstanceExists)
+			if (Explosion.s_InstanceExists)
 			{
-				ExplosionManager em = ExplosionManager.s_Instance;
+				Explosion em = Explosion.s_Instance;
 				if (settings != null)
 				{
 					em.SpawnExplosion(transform.position, explosionNormal, gameObject, m_OwningPlayerId, settings, false);
 				}
-				ExplosionManager.SpawnDebris(explosionPosition, explosionNormal, m_OwningPlayerId, c.collider, m_SpawnedDebris, m_RandSeed);
+				Explosion.SpawnDebris(explosionPosition, explosionNormal, m_OwningPlayerId, c.collider, m_SpawnedDebris, m_RandSeed);
 			}
 
 			//If we're bouncing, reflect our movement direction, decay our force, reduce our number of bounces.

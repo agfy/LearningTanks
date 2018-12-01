@@ -33,6 +33,8 @@ public class Explosion : MonoBehaviour
 	
 	[SerializeField]
 	public Effect firingExplosion;
+	public GameObject myAcademyObj;
+	TankAcademy myAcademy;
 
 	/// <summary>
 	/// Gets whether an instance of this singleton exists
@@ -57,7 +59,7 @@ public class Explosion : MonoBehaviour
 		{
 			s_Instance = this;
 		}
-
+		myAcademy = myAcademyObj.GetComponent<TankAcademy>();
 		m_PhysicsMask = LayerMask.GetMask("Players", "Projectiles", "Powerups", "DestructibleHazards", "Decorations");
 	}
 
@@ -178,16 +180,25 @@ public class Explosion : MonoBehaviour
 
 				// If there is one, deal it damage
 				if (targetHealth != null &&
-					targetHealth.isAlive &&
+					//targetHealth.isAlive &&
 					explosionDistance < explosionConfig.explosionRadius)
 				{
 					// Calculate the proportion of the maximum distance (the explosionRadius) the target is away.
-					float normalizedDistance = Mathf.Clamp01((explosionConfig.explosionRadius - explosionDistance) / explosionConfig.explosionRadius);
+					float normalizedDistance =
+						Mathf.Clamp01((explosionConfig.explosionRadius - explosionDistance) / explosionConfig.explosionRadius);
 
 					// Calculate damage as this proportion of the maximum possible damage.
 					float damage = normalizedDistance * explosionConfig.damage;
 
 					// Deal this damage to the tank.
+					if (damageOwnerId == struckCollider.GetComponentInParent<Shooting>().m_PlayerNumber)
+					{
+						myAcademy.AddRewardToPlayer(damageOwnerId, -1 * damage);
+					}
+					else
+					{
+						myAcademy.AddRewardToPlayer(damageOwnerId, damage);
+					}	
 					targetHealth.SetDamagedBy(damageOwnerId, explosionConfig.id);
 					targetHealth.Damage(damage);
 				}

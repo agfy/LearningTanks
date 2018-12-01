@@ -8,17 +8,16 @@ public class TankAcademy : Academy
 	[HideInInspector]
 	public GameObject[] agents;
 	[HideInInspector]
-	public BananaArea[] listArea;
+	public TankArea[] listArea;
 
 	public int totalScore;
 	public Text scoreText;
 	public override void AcademyReset()
 	{
-		agents = GameObject.FindGameObjectsWithTag("Agent");
-		listArea = FindObjectsOfType<BananaArea>();
-		foreach (BananaArea ba in listArea)
+		listArea = FindObjectsOfType<TankArea>();
+		foreach (TankArea tankArea in listArea)
 		{
-			ba.ResetBananaArea(agents);
+			tankArea.ResetArea(agents);
 		}
 
 		totalScore = 0;
@@ -42,5 +41,18 @@ public class TankAcademy : Academy
 	public override void InitializeAcademy()
 	{
 		//Physics.gravity *= gravityMultiplier;
+		agents = GameObject.FindGameObjectsWithTag("Agent");
+	}
+
+	public void AddRewardToPlayer(int playerId, float points)
+	{
+		foreach (var agent in agents)
+		{
+			if (agent.GetComponent<Shooting>().m_PlayerNumber == playerId)
+			{
+				Debug.LogFormat("Added {0} to player {1}", points, playerId);
+				agent.GetComponent<TankAgent>().AddReward(points);
+			}
+		}
 	}
 }
